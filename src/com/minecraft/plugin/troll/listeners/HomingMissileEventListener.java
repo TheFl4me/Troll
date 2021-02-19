@@ -24,7 +24,8 @@ public class HomingMissileEventListener implements Listener {
         if (action == Action.RIGHT_CLICK_AIR && event.hasItem()) {
             if(event.getItem().getType() == Material.FIRE_CHARGE) {
                 //BENE UUID: 8caafe0d-b501-42e8-85ed-70d34f6a177c
-                UUID uuid = UUID.fromString("8bcf09c8-f2fb-4c59-9b5b-b882c7d35752");
+                //Fl4me UUID: 8bcf09c8-f2fb-4c59-9b5b-b882c7d35752
+                UUID uuid = UUID.fromString("8caafe0d-b501-42e8-85ed-70d34f6a177c");
                 Player target = Bukkit.getPlayer(uuid);
                 if (target != null) {
                     if (player.getWorld().equals(target.getWorld())) {
@@ -64,7 +65,6 @@ public class HomingMissileEventListener implements Listener {
         for (Missile missile : MissileManager.getMissiles().values()) {
             if (player.getUniqueId().equals(missile.getLauncher().getUniqueId()) || player.getUniqueId().equals(missile.getTarget().getUniqueId())) {
                 missile.cleanUp();
-                break;
             }
         }
     }

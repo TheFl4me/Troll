@@ -22,8 +22,13 @@ public class Missile {
         this.homingTask = new BukkitRunnable() {
             @Override
             public void run() {
-                adjustCourse();
-                notifyStatus(2);
+                if (getLocation().getWorld().equals(getTarget().getWorld())) {
+                    adjustCourse();
+                    notifyStatus(2);
+                } else {
+                    notifyStatus(0);
+                    cleanUp();
+                }
             }
         };
         this.getHomingTask().runTaskTimer(Troll.getPlugin(), 40, 1);
