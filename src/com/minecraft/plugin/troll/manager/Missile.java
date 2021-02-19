@@ -59,6 +59,7 @@ public class Missile {
     }
 
     public void adjustCourse() {
+        this.getLocation().getWorld().loadChunk(this.getLocation().getChunk());
 
         final double ACCURACY = 0.15;
         final double ACCURACY_INCREASE_DISTANCE_THRESHOLD = 4;
@@ -74,7 +75,6 @@ public class Missile {
 
         this.getEntity().setVelocity(this.getEntity().getVelocity().add(this.getTarget().getLocation().subtract(this.getLocation()).toVector().normalize().multiply(localAccuracy * SPEED)).normalize().multiply(SPEED));
 
-        this.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, this.getLocation(), 1);
     }
 
     public void notifyLaunch() {

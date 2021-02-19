@@ -13,8 +13,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.UUID;
-
 public class HomingMissileEventListener implements Listener {
 
     @EventHandler
@@ -23,13 +21,19 @@ public class HomingMissileEventListener implements Listener {
         Action action = event.getAction();
         if (action == Action.RIGHT_CLICK_AIR && event.hasItem()) {
             if(event.getItem().getType() == Material.FIRE_CHARGE) {
-                //BENE UUID: 8caafe0d-b501-42e8-85ed-70d34f6a177c
-                //Fl4me UUID: 8bcf09c8-f2fb-4c59-9b5b-b882c7d35752
-                UUID uuid = UUID.fromString("8caafe0d-b501-42e8-85ed-70d34f6a177c");
-                Player target = Bukkit.getPlayer(uuid);
+
+                Player target = null;
+                for (Player potential : Bukkit.getOnlinePlayers()) {
+                    double potentialDistance = potential.getLocation().distance(player.getLocation());
+                    if (potentialDistance > 20) {
+                        if (target == null || potentialDistance < target.getLocation().distance(potential.getLocation())) {
+                            target = potential;
+                        }
+                    }
+                }
+
                 if (target != null) {
                     if (player.getWorld().equals(target.getWorld())) {
-
                         Missile missile = new Missile(player, target);
                         MissileManager.add(missile);
                         missile.notifyLaunch();
@@ -47,6 +51,7 @@ public class HomingMissileEventListener implements Listener {
             if (MissileManager.contains(fireball)) {
                 Missile missile = MissileManager.get(fireball);
 
+                missile.getLocation().getWorld().createExplosion(missile.getLocation(), 100, true, true, missile.getEntity());
                 int status;
                 if(missile.getDistance() > 5)
                     status = 0;
