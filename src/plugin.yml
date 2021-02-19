@@ -1,0 +1,5 @@
+  name: Troll
+  main: com.minecraft.plugin.troll.Troll
+  version: 0.1
+  author: TheFl4me
+  api-version: 1.16

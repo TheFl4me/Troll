@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Troll">
+    <output-path>$USER_HOME$/Downloads</output-path>
+    <root id="archive" name="Troll.jar">
+      <element id="module-output" name="Troll" />
+    </root>
+  </artifact>
+</component>
