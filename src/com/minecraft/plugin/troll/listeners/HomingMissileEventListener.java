@@ -1,5 +1,6 @@
 package com.minecraft.plugin.troll.listeners;
 
+import com.minecraft.plugin.troll.Troll;
 import com.minecraft.plugin.troll.manager.Missile;
 import com.minecraft.plugin.troll.manager.MissileManager;
 import org.bukkit.*;
@@ -9,9 +10,15 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.Random;
 
 public class HomingMissileEventListener implements Listener {
 
@@ -24,10 +31,12 @@ public class HomingMissileEventListener implements Listener {
 
                 Player target = null;
                 for (Player potential : Bukkit.getOnlinePlayers()) {
-                    double potentialDistance = potential.getLocation().distance(player.getLocation());
-                    if (potentialDistance > 20) {
-                        if (target == null || potentialDistance < target.getLocation().distance(potential.getLocation())) {
-                            target = potential;
+                    if (potential.getLocation().getWorld().equals(player.getLocation().getWorld())) {
+                        double potentialDistance = potential.getLocation().distance(player.getLocation());
+                        if (potentialDistance > 20) {
+                            if (target == null || potentialDistance < target.getLocation().distance(potential.getLocation())) {
+                                target = potential;
+                            }
                         }
                     }
                 }
@@ -70,6 +79,31 @@ public class HomingMissileEventListener implements Listener {
         for (Missile missile : MissileManager.getMissiles().values()) {
             if (player.getUniqueId().equals(missile.getLauncher().getUniqueId()) || player.getUniqueId().equals(missile.getTarget().getUniqueId())) {
                 missile.cleanUp();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDestroyDiamond(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (event.getBlock().getType() == Material.DIAMOND_ORE) { //UUID of Bene 8caafe0d-b501-42e8-85ed-70d34f6a177c
+            Random r = new Random();
+            int per = r.nextInt(10);
+            if (per <= 2) {
+                player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_EMERGE, 1, 1);
+                BukkitTask taskID = Bukkit.getScheduler().runTaskTimer(Troll.getPlugin(), () -> {
+                    Random r2 = new Random();
+                    Sound sound;
+                    int per1 = r2.nextInt(10);
+                    if (per1 <= 2) {
+                        player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_SNIFF, 1, 1);
+                    }
+                    player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_HEARTBEAT, 1, 1);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 12 * 20, 0));
+                },20 * 8, 20 * 2);
+
+
+                Bukkit.getScheduler().runTaskLater(Troll.getPlugin(), taskID::cancel, 20 * 40);
             }
         }
     }

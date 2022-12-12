@@ -7,15 +7,22 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../1.19.2/craftbukkit-1.19.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../1.16.5/craftbukkit-1.16.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../1.19.2/Bukkit/target/bukkit-1.19.2-R0.1-SNAPSHOT-shaded.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../1.16.5/craftbukkit-1.16.5.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
